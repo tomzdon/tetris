@@ -5,11 +5,11 @@ import { StaticsGame } from "../../components/styles/StaticsGame";
 import { TableWithCells } from "../../components/TableWithCells/TableWithCells";
 import { createStage } from "../../constants/helpers";
 import { Button } from "../../components/Button/Button";
-import { figure } from "../../constants/figure";
+import { usePlayer } from "../../hooks/usePlayer";
 
 export const Tetris = () => {
   const [stage, setStage] = useState(createStage());
-  const [currentFigure, setCurrentFigure] = useState();
+  const [player, currentFigure, positionPlayer, resetPlayer, setPlayer] = usePlayer();
 
   const copyStage = () => {
     return stage.map(row =>
@@ -17,18 +17,11 @@ export const Tetris = () => {
     );
   };
 
-  const randomFigure = () => {
-    const figuresName = "IJLSOTZ";
-    const figureRandom =
-      figuresName[Math.floor(Math.random() * figuresName.length)];
-    setCurrentFigure(figure[figureRandom]);
-  };
-
-  const getFigure = figures => {
+  const getFigure = () => {
     const newStage = copyStage();
-    currentFigure.positionStart.forEach((row, y) => {
+    currentFigure.forEach((row, y) => {
       row.forEach((value, x) => {
-        newStage[y][x] = [value];
+        newStage[y + player.position.y][x + player.position.x] = [value, "clear"];
       });
     });
 
@@ -36,8 +29,9 @@ export const Tetris = () => {
   };
 
   const startGame = () => {
-    randomFigure();
-    setStage(getFigure(figure));
+    // resetPlayer();
+    setStage(getFigure());
+    positionPlayer(0, 1);
   };
 
   return (

@@ -1,4 +1,4 @@
-export const figure = {
+export const figures = {
   0: { positionStart: [[0]], color: "0, 0, 0" },
   I: {
     color: "80, 227, 230",
@@ -56,4 +56,11 @@ export const figure = {
     ],
     color: "227, 78, 78"
   }
+};
+
+export const randomFigure = () => {
+  const figuresName = "IJLSOTZ";
+  const figureRandom =
+    figuresName[Math.floor(Math.random() * figuresName.length)];
+  return figures[figureRandom].positionStart;
 };

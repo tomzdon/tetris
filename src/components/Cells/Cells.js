@@ -1,10 +1,10 @@
 import React from 'react';
 import { CellsStyle } from '../styles/CellsStyle'
-import { figure } from '../../constants/figure';
+import { figures } from '../../constants/figures';
 
 export const Cells = ({type}) => (
     
-    <CellsStyle color={figure[type].color} type={type}>
+    <CellsStyle color={figures[type].color} type={type}>
         {console.log(type)}
     </CellsStyle>
 )
