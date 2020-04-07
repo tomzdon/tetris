@@ -14,11 +14,12 @@ export const Tetris = () => {
     currentFigure,
     positionPlayer,
     resetPlayer,
+    checkCollid,
     setPlayer
   ] = usePlayer();
-  
-  const [stage, setStage] = useStage(player, currentFigure);
- 
+
+  const [stage, setStage] = useStage(player, currentFigure, checkCollid, resetPlayer);
+
   const copyStage = () => {
     return stage.map(row =>
       row.map(cell => (cell[1] === "clear" ? [0, "clear"] : cell))
@@ -59,12 +60,13 @@ export const Tetris = () => {
   };
 
   return (
-    <DisplayGame tabIndex="0" onKeyDown={e => move(e)}>
+    <DisplayGame tabIndex="0"
+      onKeyDown={e => move(e)} >
       <TableWithCells stage={stage} />
-      <asad>
-        <StaticsGame></StaticsGame>
-        <Button callback={startGame}></Button>
-      </asad>
+      <asad >
+        <StaticsGame ></StaticsGame>
+        <Button callback={startGame} > </Button>
+      </asad >
     </DisplayGame>
   );
 };
