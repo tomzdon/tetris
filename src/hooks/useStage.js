@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { createStage } from "../../src/constants/helpers";
+import { createStage } from "../helpers";
 
+export const useStage = (player, currentFigure, resetPlayer) => {
+  const [stage, setStage] = useState(createStage());
 
-export const useStage = (player, currentFigure, checkCollid, resetPlayer) => {
-    const [stage, setStage] = useState(createStage());
+  useEffect(() => {
+    const sweepRows = (newStage) => {};
 
-    useEffect(() => {
-        const updateStage = prevStage => {
-            const newStage = prevStage.map(row =>
-                row.map(cell => (cell[1] === 'clear' ? [0, 'clear'] : cell))
-            );
-            currentFigure.forEach((row, y) => {
-                row.forEach((value, x) => {
-                    newStage[y + player.position.y][x + player.position.x] = [
-                        value,
-                        "clear"
-                    ];
-                });
-            });
-            return newStage;
-        };
-        if (checkCollid()) {
-            return resetPlayer;
-        }
+    const updateStage = (prevStage) => {
+      const newStage = prevStage.map((row) =>
+        row.map((cell) => (cell[1] === "clear" ? [0, "clear"] : cell))
+      );
+      currentFigure.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (value !== 0) {
+            newStage[y + player.position.y][x + player.position.x] = [
+              value,
+              `${player.collid ? "merged" : "clear"}`,
+            ];
+          }
+        });
+      });
+      if (player.collid) {
+        resetPlayer();
+        // return sweepRows(newStage);
+      }
 
-        setStage(prev => updateStage(prev));
-    }, [player.position.x, player.position.y]);
+      return newStage;
+    };
 
-    return [stage, setStage];
+    setStage((prev) => updateStage(prev));
+  }, [player.position.x, player.position.y, player.collid]);
+
+  return [stage, setStage];
 };
