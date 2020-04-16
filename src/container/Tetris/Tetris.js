@@ -6,6 +6,7 @@ import { TableWithCells } from "../../components/TableWithCells/TableWithCells";
 import { Button } from "../../components/Button/Button";
 import { usePlayer } from "../../hooks/usePlayer";
 import { useStage } from "../../hooks/useStage";
+import { useInterval } from "../../hooks/useInterval";
 import { checkCollisions } from "../../helpers";
 
 export const Tetris = () => {
@@ -20,33 +21,34 @@ export const Tetris = () => {
   const [stage, setStage] = useStage(player, currentFigure, resetPlayer);
 
   const movePlayer = (dir) => {
-    if (!checkCollisions(player, stage, { x: dir, y: 1 })) {
-      positionPlayer(dir, 1, false);
-    } else {
-      positionPlayer(0, 0, true);
+    if (!checkCollisions(player, stage, { x: dir, y: 0 })) {
+      positionPlayer(dir, 0, false);
     }
   };
 
   const move = ({ keyCode }) => {
-    console.log(keyCode);
     if (keyCode === 37) {
       movePlayer(-1);
     } else if (keyCode === 39) {
       movePlayer(1);
     } else if (keyCode === 40) {
-      if (!checkCollisions(player, stage, { x: 0, y: 1 })) {
-        positionPlayer(0, 1, false);
-      } else {
-        positionPlayer(0, 0, true);
-      }
     } else if (keyCode === 38) {
-      if (!checkCollisions(player, stage, { x: 0, y: 1 })) {
-        positionPlayer(0, 1, false);
-      } else {
-        positionPlayer(0, 0, true);
-      }
     }
   };
+  
+  const settingsGame = () => {
+    if (!checkCollisions(player, stage, { x: 0, y: 1 })) {
+      positionPlayer(0, 1, false);
+    } else {
+      positionPlayer(0, 0, true);
+    }
+  };
+
+  useInterval(
+    () => {
+      settingsGame();
+    }, 300
+  );
 
   const startGame = () => {
     // resetPlayer();
